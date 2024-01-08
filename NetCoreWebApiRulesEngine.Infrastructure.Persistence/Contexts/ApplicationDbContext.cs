@@ -5,9 +5,11 @@ using Microsoft.Extensions.Logging;
 using NetCoreWebApiRulesEngine.Application.Interfaces;
 using NetCoreWebApiRulesEngine.Domain.Common;
 using NetCoreWebApiRulesEngine.Domain.Entities;
+using Newtonsoft.Json;
 using RulesEngine.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading;
@@ -32,7 +34,7 @@ namespace NetCoreWebApiRulesEngine.Infrastructure.Persistence.Contexts
 
         public DbSet<Position> Positions { get; set; }
         // Rules Engine
-        public DbSet<Workflow> Workflows { get; set; }
+        public DbSet<RulesEngine.Models.Workflow> Workflows { get; set; }
         public DbSet<Rule> Rules { get; set; }
 
 

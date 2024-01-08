@@ -6,10 +6,16 @@ using Microsoft.Extensions.Hosting;
 using NetCoreWebApiRulesEngine.Application;
 using NetCoreWebApiRulesEngine.Infrastructure.Persistence;
 using NetCoreWebApiRulesEngine.Infrastructure.Persistence.Contexts;
+using NetCoreWebApiRulesEngine.Infrastructure.Persistence.SeedData;
 using NetCoreWebApiRulesEngine.Infrastructure.Shared;
 using NetCoreWebApiRulesEngine.WebApi.Extensions;
+using Newtonsoft.Json;
+using RulesEngine.Models;
 using Serilog;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 try
 {
@@ -54,7 +60,10 @@ try
         {
             var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             // use context
-            dbContext.Database.EnsureCreated();
+            if (dbContext.Database.EnsureCreated())
+            {
+                DbInitializer.RulesInitialize(dbContext);
+            }
         }
 
     }

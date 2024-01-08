@@ -24,7 +24,7 @@ namespace NetCoreWebApiRulesEngine.Application.Features.Positions.Commands.Delet
             public async Task<Response<Guid>> Handle(DeletePositionByIdCommand command, CancellationToken cancellationToken)
             {
                 var position = await _positionRepository.GetByIdAsync(command.Id);
-                if (position == null) throw new ApiException($"Position Not Found.");
+                if (position == null) throw new ApiException($"Workflow Not Found.");
                 await _positionRepository.DeleteAsync(position);
                 return new Response<Guid>(position.Id);
             }
