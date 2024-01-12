@@ -1,6 +1,6 @@
+using EFCore.BulkExtensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NetCoreWebApiRulesEngine.Application;
@@ -8,14 +8,10 @@ using NetCoreWebApiRulesEngine.Infrastructure.Persistence;
 using NetCoreWebApiRulesEngine.Infrastructure.Persistence.Contexts;
 using NetCoreWebApiRulesEngine.Infrastructure.Persistence.SeedData;
 using NetCoreWebApiRulesEngine.Infrastructure.Shared;
+using NetCoreWebApiRulesEngine.Infrastructure.Shared.Services;
 using NetCoreWebApiRulesEngine.WebApi.Extensions;
-using Newtonsoft.Json;
-using RulesEngine.Models;
 using Serilog;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 try
 {
@@ -60,20 +56,23 @@ try
         {
             var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             // use context
+            // Generate seed data with Bogus
+            var databaseSeeder = new DatabaseSeeder(1000);
             if (dbContext.Database.EnsureCreated())
             {
                 DbInitializer.RulesInitialize(dbContext);
+                dbContext.BulkInsert(databaseSeeder.Departments);
+                dbContext.BulkInsert(databaseSeeder.SalaryRanges);
+                dbContext.BulkInsert(databaseSeeder.Positions);
+                dbContext.BulkInsert(databaseSeeder.Employees);
             }
         }
-
     }
     else
     {
         app.UseExceptionHandler("/Error");
         app.UseHsts();
-
     }
-
 
     // Add this line; you'll need `using Serilog;` up the top, too
     app.UseSerilogRequestLogging();
@@ -91,8 +90,6 @@ try
     Log.Information("Application Starting");
 
     app.Run();
-
-
 }
 catch (Exception ex)
 {

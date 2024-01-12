@@ -9,8 +9,7 @@ namespace NetCoreWebApiRulesEngine.Application.Features.Employees.Queries.GetEmp
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
-        public string EmployeeTitle { get; set; }
-        public DateTime DOB { get; set; }
+        public DateTime Birthday { get; set; }
         public string Email { get; set; }
         public Gender Gender { get; set; }
         public string EmployeeNumber { get; set; }

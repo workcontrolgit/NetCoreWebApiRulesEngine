@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using NetCoreWebApiRulesEngine.Application.Interfaces;
 using NetCoreWebApiRulesEngine.Application.Interfaces.Repositories;
 using NetCoreWebApiRulesEngine.Application.Parameters;
@@ -15,6 +14,7 @@ namespace NetCoreWebApiRulesEngine.Application.Features.Employees.Queries.GetEmp
     {
         //strong type input parameters
         public int Draw { get; set; } //page number
+
         public int Start { get; set; } //Paging first record indicator. This is the start point in the current data set (0 index based - i.e. 0 is the first record).
         public int Length { get; set; } //page size
         public IList<SortOrder> SortOrder { get; set; } //Order by
@@ -26,8 +26,6 @@ namespace NetCoreWebApiRulesEngine.Application.Features.Employees.Queries.GetEmp
     {
         private readonly IEmployeeRepositoryAsync _repository;
         private readonly IModelHelper _modelHelper;
-
-
 
         /// <summary>
         /// Constructor for PageEmployeeQueryHandler class.
@@ -42,8 +40,6 @@ namespace NetCoreWebApiRulesEngine.Application.Features.Employees.Queries.GetEmp
             _repository = repository;
             _modelHelper = modelHelper;
         }
-
-
 
         /// <summary>
         /// Handles the PagedEmployeesQuery request and returns a PagedDataTableResponse.
@@ -75,6 +71,7 @@ namespace NetCoreWebApiRulesEngine.Application.Features.Employees.Queries.GetEmp
                 case 2:
                     validFilter.OrderBy = colOrder.Dir == "asc" ? "EmployeeTitle" : "EmployeeTitle DESC";
                     break;
+
                 case 3:
                     validFilter.OrderBy = colOrder.Dir == "asc" ? "Email" : "Email DESC";
                     break;
@@ -88,7 +85,6 @@ namespace NetCoreWebApiRulesEngine.Application.Features.Employees.Queries.GetEmp
                 validFilter.FirstName = request.Search.Value;
                 validFilter.Email = request.Search.Value;
                 validFilter.EmployeeNumber = request.Search.Value;
-                validFilter.EmployeeTitle = request.Search.Value;
             }
             if (string.IsNullOrEmpty(validFilter.Fields))
             {

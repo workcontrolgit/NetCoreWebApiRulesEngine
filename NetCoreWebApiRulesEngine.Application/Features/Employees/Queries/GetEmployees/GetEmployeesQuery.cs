@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using NetCoreWebApiRulesEngine.Application.Interfaces;
 using NetCoreWebApiRulesEngine.Application.Interfaces.Repositories;
 using NetCoreWebApiRulesEngine.Application.Parameters;
@@ -20,19 +19,16 @@ namespace NetCoreWebApiRulesEngine.Application.Features.Employees.Queries.GetEmp
     {
         //examples:
         public string EmployeeNumber { get; set; }
-        public string EmployeeTitle { get; set; }
+
         public string LastName { get; set; }
         public string FirstName { get; set; }
         public string Email { get; set; }
-
     }
 
     public class GetAllEmployeesQueryHandler : IRequestHandler<GetEmployeesQuery, PagedResponse<IEnumerable<Entity>>>
     {
         private readonly IEmployeeRepositoryAsync _employeeRepository;
         private readonly IModelHelper _modelHelper;
-
-
 
         /// <summary>
         /// Constructor for GetAllEmployeesQueryHandler class.
@@ -47,8 +43,6 @@ namespace NetCoreWebApiRulesEngine.Application.Features.Employees.Queries.GetEmp
             _employeeRepository = employeeRepository;
             _modelHelper = modelHelper;
         }
-
-
 
         /// <summary>
         /// Handles the GetEmployeesQuery request and returns a PagedResponse containing the requested data.

@@ -18,15 +18,13 @@ namespace NetCoreWebApiRulesEngine.Infrastructure.Persistence.Repositories
         private readonly IDataShapeHelper<Employee> _dataShaper;
         private readonly IMockService _mockData;
 
-
-
         /// <summary>
         /// Constructor for EmployeeRepositoryAsync class.
         /// </summary>
         /// <param name="dataShaper">IDataShapeHelper object.</param>
         /// <param name="mockData">IMockService object.</param>
         /// <returns>
-        /// 
+        ///
         /// </returns>
         public EmployeeRepositoryAsync(ApplicationDbContext dbContext,
             IDataShapeHelper<Employee> dataShaper,
@@ -35,8 +33,6 @@ namespace NetCoreWebApiRulesEngine.Infrastructure.Persistence.Repositories
             _dataShaper = dataShaper;
             _mockData = mockData;
         }
-
-
 
         /// <summary>
         /// Retrieves a paged list of employees based on the provided query parameters.
@@ -47,7 +43,6 @@ namespace NetCoreWebApiRulesEngine.Infrastructure.Persistence.Repositories
         {
             IQueryable<Employee> qry;
 
-            var employeeTitle = requestParameters.EmployeeTitle;
             var lastName = requestParameters.LastName;
             var firstName = requestParameters.FirstName;
             var email = requestParameters.Email;
@@ -68,7 +63,7 @@ namespace NetCoreWebApiRulesEngine.Infrastructure.Persistence.Repositories
             recordsTotal = qry.Count();
 
             // filter data
-            FilterByColumn(ref qry, employeeTitle, lastName, firstName, email);
+            FilterByColumn(ref qry, lastName, firstName, email);
 
             // Count records after filter
             recordsFiltered = qry.Count();
@@ -96,7 +91,6 @@ namespace NetCoreWebApiRulesEngine.Infrastructure.Persistence.Repositories
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize);
 
-
             // retrieve data to list
             // var resultData = await result.ToListAsync();
             // Note: Bogus library does not support await for AsQueryable.
@@ -109,8 +103,6 @@ namespace NetCoreWebApiRulesEngine.Infrastructure.Persistence.Repositories
             return (shapeData, recordsCount);
         }
 
-
-
         /// <summary>
         /// Filters an IQueryable of employees based on the provided parameters.
         /// </summary>
@@ -119,18 +111,12 @@ namespace NetCoreWebApiRulesEngine.Infrastructure.Persistence.Repositories
         /// <param name="lastName">The last name to filter by.</param>
         /// <param name="firstName">The first name to filter by.</param>
         /// <param name="email">The email to filter by.</param>
-        private void FilterByColumn(ref IQueryable<Employee> qry, string employeeTitle, string lastName, string firstName, string email)
+        private void FilterByColumn(ref IQueryable<Employee> qry, string lastName, string firstName, string email)
         {
             if (!qry.Any())
                 return;
 
-            if (string.IsNullOrEmpty(employeeTitle) && string.IsNullOrEmpty(lastName) && string.IsNullOrEmpty(firstName) && string.IsNullOrEmpty(email))
-                return;
-
             var predicate = PredicateBuilder.New<Employee>();
-
-            if (!string.IsNullOrEmpty(employeeTitle))
-                predicate = predicate.Or(p => p.EmployeeTitle.ToLower().Contains(employeeTitle.ToLower().Trim()));
 
             if (!string.IsNullOrEmpty(lastName))
                 predicate = predicate.Or(p => p.LastName.ToLower().Contains(lastName.ToLower().Trim()));
@@ -140,7 +126,6 @@ namespace NetCoreWebApiRulesEngine.Infrastructure.Persistence.Repositories
 
             if (!string.IsNullOrEmpty(email))
                 predicate = predicate.Or(p => p.Email.ToLower().Contains(email.ToLower().Trim()));
-
 
             qry = qry.Where(predicate);
         }

@@ -25,7 +25,8 @@ namespace NetCoreWebApiRulesEngine.Infrastructure.Shared.Services
             var breResult = DiscountRule();
 
             // Example of a rule: Salary should not be more than 1 million
-            return position.PositionSalary <= 1000000;
+            // return position.PositionSalary <= 1000000;
+            return false;
         }
 
         private bool DiscountRule()

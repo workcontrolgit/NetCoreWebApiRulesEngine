@@ -2,7 +2,6 @@
 using NetCoreWebApiRulesEngine.Domain.Entities;
 using System;
 
-
 namespace NetCoreWebApiRulesEngine.Infrastructure.Shared.Mock
 {
     public class PositionInsertBogusConfig : Faker<Position>
@@ -13,7 +12,6 @@ namespace NetCoreWebApiRulesEngine.Infrastructure.Shared.Mock
             RuleFor(o => o.PositionTitle, f => f.Name.JobTitle());
             RuleFor(o => o.PositionNumber, f => f.Commerce.Ean13());
             RuleFor(o => o.PositionDescription, f => f.Name.JobDescriptor());
-            RuleFor(o => o.PositionSalary, f => f.Finance.Amount());
             RuleFor(o => o.Created, f => f.Date.Past(1));
             RuleFor(o => o.CreatedBy, f => f.Name.FullName());
             RuleFor(o => o.LastModified, f => f.Date.Recent(1));

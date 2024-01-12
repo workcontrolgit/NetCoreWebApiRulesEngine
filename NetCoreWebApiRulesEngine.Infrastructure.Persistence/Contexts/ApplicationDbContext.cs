@@ -1,17 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Logging;
 using NetCoreWebApiRulesEngine.Application.Interfaces;
 using NetCoreWebApiRulesEngine.Domain.Common;
 using NetCoreWebApiRulesEngine.Domain.Entities;
-using Newtonsoft.Json;
 using RulesEngine.Models;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -32,11 +25,15 @@ namespace NetCoreWebApiRulesEngine.Infrastructure.Persistence.Contexts
             _loggerFactory = loggerFactory;
         }
 
+        public DbSet<Department> Departments { get; set; }
         public DbSet<Position> Positions { get; set; }
-        // Rules Engine
-        public DbSet<RulesEngine.Models.Workflow> Workflows { get; set; }
-        public DbSet<Rule> Rules { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<SalaryRange> SalaryRanges { get; set; }
 
+        // Rules Engine
+        public DbSet<Workflow> Workflows { get; set; }
+
+        public DbSet<Rule> Rules { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -62,16 +59,15 @@ namespace NetCoreWebApiRulesEngine.Infrastructure.Persistence.Contexts
             // Configure the tables
             modelBuilder.ApplyConfiguration(new PositionConfiguration());
             // Seed position data
-            var _mockData = this.Database.GetService<IMockService>();
+            //var _mockData = this.Database.GetService<IMockService>();
             // mock 1000 rows
-            var seedPositions = _mockData.SeedPositions(1000);
+            //var seedPositions = _mockData.SeedPositions(1000);
             // seed mock data
-            modelBuilder.Entity<Position>().HasData(seedPositions);
-            
+            //modelBuilder.Entity<Position>().HasData(seedPositions);
+
             // rules engine
             ApplicationDbContextHelpers.
                         RulesEngineModelCreating(modelBuilder);
-
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

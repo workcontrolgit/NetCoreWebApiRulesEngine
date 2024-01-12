@@ -18,7 +18,6 @@ namespace NetCoreWebApiRulesEngine.Application.Features.Positions.Commands.Updat
         public string PositionTitle { get; set; }
         public string PositionNumber { get; set; }
         public string PositionDescription { get; set; }
-        public decimal PositionSalary { get; set; }
 
         public class UpdatePositionCommandHandler : IRequestHandler<UpdatePositionCommand, Response<Guid>>
         {
@@ -42,7 +41,6 @@ namespace NetCoreWebApiRulesEngine.Application.Features.Positions.Commands.Updat
                 else
                 {
                     position.PositionTitle = command.PositionTitle;
-                    position.PositionSalary = command.PositionSalary;
                     position.PositionDescription = command.PositionDescription;
 
                     // example local rules
@@ -73,8 +71,7 @@ namespace NetCoreWebApiRulesEngine.Application.Features.Positions.Commands.Updat
                     {
                         if (eventName == "Discount given on a Sunday")
                         {
-                            var discount = (position.PositionSalary / 100) * 10;
-                            position.PositionSalary = position.PositionSalary - discount;
+                            //var discount = (position.PositionSalary / 100) * 10;
                         }
                     });
                 }
