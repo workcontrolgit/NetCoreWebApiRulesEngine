@@ -57,17 +57,13 @@ namespace NetCoreWebApiRulesEngine.Infrastructure.Persistence.Contexts
         {
             base.OnModelCreating(modelBuilder);
             // Configure the tables
-            modelBuilder.ApplyConfiguration(new PositionConfiguration());
-            // Seed position data
-            //var _mockData = this.Database.GetService<IMockService>();
-            // mock 1000 rows
-            //var seedPositions = _mockData.SeedPositions(1000);
-            // seed mock data
-            //modelBuilder.Entity<Position>().HasData(seedPositions);
+            //modelBuilder.ApplyConfiguration(new PositionConfiguration());
+
+            // Human resources
+            ApplicationDbContextHelpers.HumanResourceModelCreating(modelBuilder);
 
             // rules engine
-            ApplicationDbContextHelpers.
-                        RulesEngineModelCreating(modelBuilder);
+            ApplicationDbContextHelpers.RulesEngineModelCreating(modelBuilder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

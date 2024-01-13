@@ -1,4 +1,5 @@
-﻿using NetCoreWebApiRulesEngine.Domain.Enums;
+﻿using NetCoreWebApiRulesEngine.Domain.Entities;
+using NetCoreWebApiRulesEngine.Domain.Enums;
 using System;
 
 namespace NetCoreWebApiRulesEngine.Application.Features.Employees.Queries.GetEmployees
@@ -13,7 +14,10 @@ namespace NetCoreWebApiRulesEngine.Application.Features.Employees.Queries.GetEmp
         public string Email { get; set; }
         public Gender Gender { get; set; }
         public string EmployeeNumber { get; set; }
-        public string Suffix { get; set; }
+        public string Prefix { get; set; }
         public string Phone { get; set; }
+        public virtual Position Position { get; set; }
+        public decimal Salary { get; set; }
+
     }
 }

@@ -24,5 +24,11 @@ namespace NetCoreWebApiRulesEngine.Domain.Entities
 
         // Navigation Property for SalaryRange
         public virtual SalaryRange SalaryRange { get; set; }
+
+        public Position()
+        {
+            Employees = new HashSet<Employee>();
+        }
+
     }
 }

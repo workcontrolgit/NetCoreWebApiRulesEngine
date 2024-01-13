@@ -1,4 +1,5 @@
 ﻿using LinqKit;
+using Microsoft.EntityFrameworkCore;
 using NetCoreWebApiRulesEngine.Application.Features.Employees.Queries.GetEmployees;
 using NetCoreWebApiRulesEngine.Application.Interfaces;
 using NetCoreWebApiRulesEngine.Application.Interfaces.Repositories;
@@ -15,6 +16,7 @@ namespace NetCoreWebApiRulesEngine.Infrastructure.Persistence.Repositories
 {
     public class EmployeeRepositoryAsync : GenericRepositoryAsync<Employee>, IEmployeeRepositoryAsync
     {
+        private readonly DbSet<Employee> _repository;
         private readonly IDataShapeHelper<Employee> _dataShaper;
         private readonly IMockService _mockData;
 
@@ -30,6 +32,7 @@ namespace NetCoreWebApiRulesEngine.Infrastructure.Persistence.Repositories
             IDataShapeHelper<Employee> dataShaper,
             IMockService mockData) : base(dbContext)
         {
+            _repository = dbContext.Set<Employee>();
             _dataShaper = dataShaper;
             _mockData = mockData;
         }
@@ -41,8 +44,6 @@ namespace NetCoreWebApiRulesEngine.Infrastructure.Persistence.Repositories
         /// <returns>A tuple containing the paged list of employees and the total number of records.</returns>
         public async Task<(IEnumerable<Entity> data, RecordsCount recordsCount)> GetPagedEmployeeResponseAsync(GetEmployeesQuery requestParameters)
         {
-            IQueryable<Employee> qry;
-
             var lastName = requestParameters.LastName;
             var firstName = requestParameters.FirstName;
             var email = requestParameters.Email;
@@ -54,19 +55,19 @@ namespace NetCoreWebApiRulesEngine.Infrastructure.Persistence.Repositories
 
             int recordsTotal, recordsFiltered;
 
-            int seedCount = 1000;
-
-            qry = _mockData.GetEmployees(seedCount)
-                .AsQueryable();
+            // Setup IQueryable
+            var result = _repository
+                .AsNoTracking()
+                .AsExpandable();
 
             // Count records total
-            recordsTotal = qry.Count();
+            recordsTotal = await result.CountAsync();
 
             // filter data
-            FilterByColumn(ref qry, lastName, firstName, email);
+            FilterByColumn(ref result, lastName, firstName, email);
 
             // Count records after filter
-            recordsFiltered = qry.Count();
+            recordsFiltered = await result.CountAsync();
 
             //set Record counts
             var recordsCount = new RecordsCount
@@ -78,24 +79,21 @@ namespace NetCoreWebApiRulesEngine.Infrastructure.Persistence.Repositories
             // set order by
             if (!string.IsNullOrWhiteSpace(orderBy))
             {
-                qry = qry.OrderBy(orderBy);
+                result = result.OrderBy(orderBy);
             }
 
             //limit query fields
             if (!string.IsNullOrWhiteSpace(fields))
             {
-                qry = qry.Select<Employee>("new(" + fields + ")");
+                result = result.Select<Employee>("new(" + fields + ")");
             }
             // paging
-            qry = qry
+            result = result
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize);
 
             // retrieve data to list
-            // var resultData = await result.ToListAsync();
-            // Note: Bogus library does not support await for AsQueryable.
-            // Workaround:  fake await with Task.Run and use regular ToList
-            var resultData = await Task.Run(() => qry.ToList());
+            var resultData = await result.ToListAsync();
 
             // shape data
             var shapeData = _dataShaper.ShapeData(resultData, fields);
@@ -114,6 +112,9 @@ namespace NetCoreWebApiRulesEngine.Infrastructure.Persistence.Repositories
         private void FilterByColumn(ref IQueryable<Employee> qry, string lastName, string firstName, string email)
         {
             if (!qry.Any())
+                return;
+
+            if (string.IsNullOrEmpty(lastName) && string.IsNullOrEmpty(firstName) && string.IsNullOrEmpty(email))
                 return;
 
             var predicate = PredicateBuilder.New<Employee>();

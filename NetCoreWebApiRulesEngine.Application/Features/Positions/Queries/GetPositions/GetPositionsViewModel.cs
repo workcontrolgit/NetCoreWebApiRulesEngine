@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NetCoreWebApiRulesEngine.Domain.Entities;
+using System;
 
 namespace NetCoreWebApiRulesEngine.Application.Features.Positions.Queries.GetPositions
 {
@@ -8,5 +9,7 @@ namespace NetCoreWebApiRulesEngine.Application.Features.Positions.Queries.GetPos
         public string PositionTitle { get; set; }
         public string PositionNumber { get; set; }
         public string PositionDescription { get; set; }
+        public virtual Department Department { get; set; }
+        public virtual SalaryRange SalaryRange { get; set; }
     }
 }

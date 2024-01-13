@@ -11,11 +11,17 @@ namespace NetCoreWebApiRulesEngine.Domain.Entities
         // Maximum salary value
         public decimal MaxSalary { get; set; }
 
-        // Optional: Description or additional details
+        // Description or additional details
         public string Description { get; set; }
 
-        // Navigation property back to Position if needed
+        // Navigation property back to Position
         public virtual ICollection<Position> Positions { get; set; }
+
+        public SalaryRange()
+        {
+            Positions = new HashSet<Position>();
+        }
+
 
         // Additional properties or methods can be added here
     }

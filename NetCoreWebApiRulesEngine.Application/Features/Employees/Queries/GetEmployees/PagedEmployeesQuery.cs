@@ -17,7 +17,7 @@ namespace NetCoreWebApiRulesEngine.Application.Features.Employees.Queries.GetEmp
 
         public int Start { get; set; } //Paging first record indicator. This is the start point in the current data set (0 index based - i.e. 0 is the first record).
         public int Length { get; set; } //page size
-        public IList<SortOrder> SortOrder { get; set; } //Order by
+        public IList<SortOrder> Order { get; set; } //Order by
         public Search Search { get; set; } //search criteria
         public IList<Column> Columns { get; set; } //select fields
     }
@@ -57,7 +57,7 @@ namespace NetCoreWebApiRulesEngine.Application.Features.Employees.Queries.GetEmp
             validFilter.PageSize = request.Length;
 
             // Map order > OrderBy
-            var colOrder = request.SortOrder[0];
+            var colOrder = request.Order[0];
             switch (colOrder.Column)
             {
                 case 0:

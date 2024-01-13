@@ -23,7 +23,7 @@ namespace NetCoreWebApiRulesEngine.Domain.Entities
         public string Email { get; set; }
         public Gender Gender { get; set; }
         public string EmployeeNumber { get; set; }
-        public string Suffix { get; set; }
+        public string Prefix { get; set; }
         public string Phone { get; set; }
     }
 }

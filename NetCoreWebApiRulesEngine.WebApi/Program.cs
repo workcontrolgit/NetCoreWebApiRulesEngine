@@ -56,11 +56,11 @@ try
         {
             var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             // use context
-            // Generate seed data with Bogus
-            var databaseSeeder = new DatabaseSeeder(1000);
             if (dbContext.Database.EnsureCreated())
             {
                 DbInitializer.RulesInitialize(dbContext);
+                // Generate seed data with Bogus
+                var databaseSeeder = new DatabaseSeeder(1000);
                 dbContext.BulkInsert(databaseSeeder.Departments);
                 dbContext.BulkInsert(databaseSeeder.SalaryRanges);
                 dbContext.BulkInsert(databaseSeeder.Positions);
